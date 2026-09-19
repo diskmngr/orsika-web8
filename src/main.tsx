@@ -1,6 +1,8 @@
 import '@vly-ai/integrations';
 import { Toaster } from "@/components/ui/sonner";
+import { DataSeeder } from "@/components/DataSeeder";
 import { RequireAuth } from "@/components/RequireAuth";
+import { SiteLayout } from "@/components/site/SiteLayout";
 import { VlyToolbar } from "../vly-toolbar-readonly.tsx";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import { ConvexReactClient } from "convex/react";
@@ -13,13 +15,19 @@ import "./index.css";
 const Landing = lazy(() => import("./pages/Landing.tsx"));
 const AuthPage = lazy(() => import("./pages/Auth.tsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
+const Divisi = lazy(() => import("./pages/Divisi.tsx"));
+const Kegiatan = lazy(() => import("./pages/Kegiatan.tsx"));
+const Galeri = lazy(() => import("./pages/Galeri.tsx"));
+const Tentang = lazy(() => import("./pages/Tentang.tsx"));
+const Kontak = lazy(() => import("./pages/Kontak.tsx"));
+const Aspirasi = lazy(() => import("./pages/Aspirasi.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 // Simple loading fallback for route transitions
 function RouteLoading() {
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-pulse text-muted-foreground">Loading...</div>
+      <div className="animate-pulse text-muted-foreground">Memuat…</div>
     </div>
   );
 }
@@ -91,6 +99,7 @@ function RouteSyncer() {
       { type: "iframe-route-change", path: location.pathname },
       "*",
     );
+    window.scrollTo({ top: 0, behavior: "auto" });
   }, [location.pathname]);
 
   useEffect(() => {
@@ -115,11 +124,25 @@ createRoot(document.getElementById("root")!).render(
         <VlyToolbar />
       </ToolbarErrorBoundary>
       <ConvexAuthProvider client={convex}>
+        <DataSeeder />
         <BrowserRouter>
           <RouteSyncer />
           <Suspense fallback={<RouteLoading />}>
             <Routes>
-              <Route path="/" element={<Landing />} />
+              <Route
+                path="/"
+                element={
+                  <SiteLayout>
+                    <Landing />
+                  </SiteLayout>
+                }
+              />
+              <Route path="/divisi" element={<Divisi />} />
+              <Route path="/kegiatan" element={<Kegiatan />} />
+              <Route path="/galeri" element={<Galeri />} />
+              <Route path="/tentang" element={<Tentang />} />
+              <Route path="/kontak" element={<Kontak />} />
+              <Route path="/aspirasi" element={<Aspirasi />} />
               <Route
                 path="/auth"
                 element={<AuthPage redirectAfterAuth="/dashboard" />}

@@ -15,7 +15,7 @@ export function formatEventDate(iso: string) {
 /** Versi ringkas untuk kartu yang sempit. */
 export function formatEventDateShort(iso: string) {
   const date = new Date(`${iso}T00:00:00`);
-  if (Number.isNaN(date.getTime())) return { day: "-", month: iso };
+  if (Number.isNaN(date.getTime())) return { day: "—", month: iso };
   return {
     day: new Intl.DateTimeFormat("id-ID", { day: "numeric" }).format(date),
     month: new Intl.DateTimeFormat("id-ID", { month: "short" }).format(date),
