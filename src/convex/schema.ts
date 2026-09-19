@@ -34,10 +34,48 @@ const schema = defineSchema(
 
     // add other tables here
 
-    // tableName: defineTable({
-    //   ...
-    //   // table fields
-    // }).index("by_field", ["field"])
+    // Kegiatan / acara yang diselenggarakan OSIS.
+    events: defineTable({
+      title: v.string(),
+      date: v.string(), // format ISO "YYYY-MM-DD" agar mudah diurutkan
+      time: v.optional(v.string()),
+      location: v.optional(v.string()),
+      category: v.optional(v.string()),
+      description: v.string(),
+    }).index("by_date", ["date"]),
+
+    // Bidang-bidang di dalam kepengurusan OSIS.
+    divisions: defineTable({
+      name: v.string(),
+      tagline: v.optional(v.string()),
+      description: v.string(),
+      emoji: v.optional(v.string()),
+      order: v.number(),
+    }).index("by_order", ["order"]),
+
+    // Susunan kepengurusan (ketua, wakil, sekretaris, dst).
+    officers: defineTable({
+      name: v.string(),
+      position: v.string(),
+      division: v.optional(v.string()),
+      message: v.optional(v.string()),
+      order: v.number(),
+    }).index("by_order", ["order"]),
+
+    // Aspirasi yang dikirim oleh warga sekolah.
+    aspirations: defineTable({
+      author: v.string(),
+      contact: v.optional(v.string()),
+      message: v.string(),
+      status: v.union(
+        v.literal("baru"),
+        v.literal("dibalas"),
+        v.literal("diarsipkan"),
+      ),
+      reply: v.optional(v.string()),
+      createdAt: v.number(),
+      repliedAt: v.optional(v.number()),
+    }).index("by_created", ["createdAt"]),
   },
   {
     schemaValidation: false,
